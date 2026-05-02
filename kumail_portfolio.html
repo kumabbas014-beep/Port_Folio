@@ -1,0 +1,1317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Kumail Dev — Frontend Developer</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="../bootstrap-5.3.8-dist/css/bootstrap.min.css">
+<style>
+/* ========== RESET & VARS ========== */
+:root {
+  --bg: #080c10;
+  --bg2: #0d1219;
+  --bg3: #111820;
+  --border: rgba(88,166,255,.12);
+  --blue: #58a6ff;
+  --green: #3fb950;
+  --purple: #bc8cff;
+  --orange: #f78166;
+  --text: #cdd9e5;
+  --muted: #768390;
+  --card: #0d1219;
+  --glow-blue: 0 0 40px rgba(88,166,255,.15);
+  --glow-green: 0 0 40px rgba(63,185,80,.15);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'DM Sans',sans-serif;
+  overflow-x:hidden;
+  cursor:none;
+}
+
+/* CUSTOM CURSOR */
+.cursor{
+  width:10px;height:10px;
+  background:var(--blue);
+  border-radius:50%;
+  position:fixed;top:0;left:0;
+  pointer-events:none;z-index:9999;
+  transition:transform .15s ease;
+  mix-blend-mode:screen;
+}
+.cursor-ring{
+  width:36px;height:36px;
+  border:1.5px solid rgba(88,166,255,.5);
+  border-radius:50%;
+  position:fixed;top:0;left:0;
+  pointer-events:none;z-index:9998;
+  transition:all .35s cubic-bezier(.25,.46,.45,.94);
+}
+body:hover .cursor{transform:scale(1);}
+
+/* NOISE OVERLAY */
+body::before{
+  content:'';
+  position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:0;opacity:.4;
+}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--blue);border-radius:2px;}
+
+/* ========== NAVBAR ========== */
+.navbar{
+  background:rgba(8,12,16,.85);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  padding:16px 0;
+  position:fixed;top:0;width:100%;z-index:100;
+  transition:all .3s;
+}
+.navbar-brand{
+  font-family:'Syne',sans-serif;
+  font-size:1.4rem;font-weight:800;
+  color:#fff !important;letter-spacing:-1px;
+}
+.navbar-brand span{color:var(--blue);}
+.nav-link{
+  color:var(--muted) !important;
+  font-size:.82rem;font-weight:500;
+  letter-spacing:.5px;text-transform:uppercase;
+  padding:6px 14px !important;
+  border-radius:6px;
+  transition:all .2s;
+}
+.nav-link:hover{color:var(--blue) !important;background:rgba(88,166,255,.07);}
+
+/* ========== HERO ========== */
+.hero{
+  min-height:100vh;
+  display:flex;align-items:center;
+  position:relative;
+  overflow:hidden;
+  padding-top:80px;
+}
+.hero-grid{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(88,166,255,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(88,166,255,.04) 1px, transparent 1px);
+  background-size:60px 60px;
+  mask-image:radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 100%);
+}
+.hero-glow{
+  position:absolute;
+  width:600px;height:600px;
+  background:radial-gradient(circle, rgba(88,166,255,.08) 0%, transparent 70%);
+  top:50%;left:50%;transform:translate(-50%,-50%);
+  pointer-events:none;
+}
+.hero-tag{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(63,185,80,.08);
+  border:1px solid rgba(63,185,80,.25);
+  color:var(--green);
+  padding:6px 16px;border-radius:50px;
+  font-size:.78rem;font-weight:600;
+  letter-spacing:1px;text-transform:uppercase;
+  margin-bottom:28px;
+  animation:fadeUp .8s ease both;
+}
+.hero-tag::before{
+  content:'';width:7px;height:7px;
+  background:var(--green);border-radius:50%;
+  animation:pulse 2s infinite;
+}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.4;transform:scale(1.4);}}
+.hero h1{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(3rem,8vw,6rem);
+  font-weight:800;
+  line-height:1.05;
+  color:#fff;
+  letter-spacing:-3px;
+  animation:fadeUp .8s .1s ease both;
+}
+.hero h1 .name{
+  background:linear-gradient(135deg, #58a6ff 0%, #bc8cff 50%, #58a6ff 100%);
+  background-size:200% auto;
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation:shimmer 4s linear infinite, fadeUp .8s .1s ease both;
+}
+@keyframes shimmer{to{background-position:200% center;}}
+.hero-sub{
+  font-size:1.1rem;color:var(--muted);
+  margin:20px 0 40px;
+  line-height:1.8;
+  max-width:520px;
+  animation:fadeUp .8s .2s ease both;
+}
+.hero-sub strong{color:var(--text);}
+.hero-btns{animation:fadeUp .8s .3s ease both;display:flex;gap:14px;flex-wrap:wrap;}
+.btn-glow{
+  background:var(--blue);
+  color:#080c10 !important;
+  font-weight:700;font-size:.88rem;
+  padding:13px 32px;border-radius:10px;
+  border:none;text-decoration:none;
+  display:inline-flex;align-items:center;gap:8px;
+  transition:all .3s;
+  box-shadow:0 0 30px rgba(88,166,255,.3);
+}
+.btn-glow:hover{
+  background:#79bbff;
+  box-shadow:0 0 50px rgba(88,166,255,.5);
+  transform:translateY(-2px);
+}
+.btn-ghost{
+  background:transparent;
+  color:var(--text) !important;
+  font-weight:600;font-size:.88rem;
+  padding:12px 28px;border-radius:10px;
+  border:1px solid var(--border);
+  text-decoration:none;
+  display:inline-flex;align-items:center;gap:8px;
+  transition:all .3s;
+}
+.btn-ghost:hover{border-color:var(--blue);color:var(--blue) !important;background:rgba(88,166,255,.05);}
+
+/* HERO AVATAR */
+.hero-avatar-wrap{
+  position:relative;
+  display:flex;align-items:center;justify-content:center;
+  animation:fadeUp .8s .2s ease both;
+}
+.hero-avatar-ring{
+  width:320px;height:320px;
+  border-radius:50%;
+  border:1px solid rgba(88,166,255,.2);
+  display:flex;align-items:center;justify-content:center;
+  position:relative;
+  animation:spin 20s linear infinite;
+}
+.hero-avatar-ring::before{
+  content:'';
+  position:absolute;inset:-1px;
+  border-radius:50%;
+  background:conic-gradient(transparent 0deg, var(--blue) 60deg, transparent 120deg);
+  -webkit-mask:radial-gradient(farthest-side, transparent calc(100% - 1px), #fff 0);
+}
+@keyframes spin{to{transform:rotate(360deg);}}
+.hero-avatar-inner img{
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+}
+.hero-avatar-inner{
+  width:280px;height:280px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#1c2d42,#111820);
+  display:flex;align-items:center;justify-content:center;
+  font-size:7rem;
+  border:1px solid rgba(88,166,255,.15);
+  animation:spin 20s linear infinite reverse;
+  box-shadow:inset 0 0 60px rgba(88,166,255,.05), var(--glow-blue);
+}
+.hero-badge{
+  position:absolute;
+  background:var(--bg3);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:10px 16px;
+  font-size:.78rem;font-weight:600;
+  display:flex;align-items:center;gap:8px;
+  backdrop-filter:blur(10px);
+  white-space:nowrap;
+  animation:spin 20s linear infinite reverse;
+}
+.hero-badge.top{top:10px;right:-20px;border-color:rgba(63,185,80,.3);color:var(--green);}
+.hero-badge.bottom{bottom:10px;left:-30px;border-color:rgba(188,140,255,.3);color:var(--purple);}
+.hero-badge.left{bottom:0px;left:-50px;border-color:rgba(188,140,255,.3);color:var(--purple);}
+
+/* FLOATING PARTICLES */
+.particles{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
+.particle{
+  position:absolute;width:2px;height:2px;
+  background:var(--blue);border-radius:50%;
+  animation:float linear infinite;
+  opacity:0;
+}
+@keyframes float{
+  0%{opacity:0;transform:translateY(100vh) scale(0);}
+  10%{opacity:.6;}
+  90%{opacity:.3;}
+  100%{opacity:0;transform:translateY(-100px) scale(1.5);}
+}
+
+/* ========== SECTION ========== */
+section{position:relative;z-index:1;}
+.section-header{text-align:center;margin-bottom:70px;}
+.section-label{
+  font-family:'Space Mono',monospace;
+  font-size:.72rem;color:var(--blue);
+  letter-spacing:3px;text-transform:uppercase;
+  display:block;margin-bottom:12px;
+}
+.section-title{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(2rem,4vw,3rem);
+  font-weight:800;color:#fff;
+  letter-spacing:-1.5px;
+  line-height:1.1;
+}
+.section-title span{color:var(--blue);}
+.section-line{
+  width:40px;height:2px;
+  background:linear-gradient(90deg,var(--blue),transparent);
+  margin:16px auto 0;
+}
+
+/* ========== ABOUT ========== */
+.about-img-wrap{position:relative;}
+.about-img{
+  width:100%;border-radius:20px;
+  background:linear-gradient(135deg,#111820,#0d1219);
+  border:1px solid var(--border);
+  height:440px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:8rem;
+  position:relative;overflow:hidden;
+}
+.about-img::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg, rgba(88,166,255,.05), rgba(188,140,255,.05));
+}
+.about-img img{
+  width:100%;
+  border-radius:20px;
+  height: 60vh;
+}
+.about-tag{
+  position:absolute;
+  background:rgba(13,18,25,.9);
+  border:1px solid var(--border);
+  border-radius:10px;padding:12px 18px;
+  font-size:.8rem;font-weight:600;
+  /* backdrop-filter:blur(10px); */
+}
+.about-tag.t1{bottom:20px;left:20px;color:var(--green);border-color:rgba(63,185,80,.25);}
+.about-tag.t2{top:20px;right:20px;color:var(--purple);border-color:rgba(188,140,255,.25);}
+.about-text p{color:var(--muted);line-height:1.9;margin-bottom:16px;}
+.about-text p strong{color:var(--text);}
+.tech-pill{
+  display:inline-block;
+  background:rgba(88,166,255,.08);
+  border:1px solid rgba(88,166,255,.2);
+  color:var(--blue);font-size:.75rem;font-weight:600;
+  padding:5px 14px;border-radius:50px;
+  margin:4px;
+}
+
+/* ========== SKILLS ========== */
+.skills-section{background:var(--bg2);}
+.skill-group-title{
+  font-family:'Space Mono',monospace;
+  font-size:.72rem;color:var(--muted);
+  letter-spacing:2px;text-transform:uppercase;
+  margin-bottom:20px;padding-bottom:10px;
+  border-bottom:1px solid var(--border);
+}
+.skill-item{margin-bottom:22px;}
+.skill-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.skill-name{font-weight:600;font-size:.88rem;color:var(--text);}
+.skill-pct{font-family:'Space Mono',monospace;font-size:.75rem;color:var(--blue);}
+.skill-bar{height:4px;background:rgba(88,166,255,.1);border-radius:2px;overflow:hidden;}
+.skill-fill{
+  height:100%;border-radius:2px;
+  background:linear-gradient(90deg,var(--blue),var(--purple));
+  position:relative;
+  transition:width 1.5s cubic-bezier(.25,.46,.45,.94);
+}
+.skill-fill::after{
+  content:'';position:absolute;right:0;top:-3px;
+  width:10px;height:10px;border-radius:50%;
+  background:var(--purple);
+  box-shadow:0 0 10px var(--purple);
+}
+
+/* TOOL BADGES */
+.tool-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--bg3);
+  border:1px solid var(--border);
+  border-radius:10px;padding:10px 16px;
+  font-size:.82rem;font-weight:600;color:var(--text);
+  margin:5px;transition:all .2s;
+}
+.tool-badge:hover{border-color:var(--blue);color:var(--blue);transform:translateY(-2px);}
+.tool-badge .ti{font-size:1.1rem;}
+
+/* ========== PROJECTS ========== */
+.project-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:18px;overflow:hidden;
+  transition:all .3s;
+  height:100%;
+  position:relative;
+}
+.project-card::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(88,166,255,.03),rgba(188,140,255,.03));
+  opacity:0;transition:opacity .3s;border-radius:18px;
+}
+.project-card:hover{
+  border-color:rgba(88,166,255,.35);
+  transform:translateY(-6px);
+  box-shadow:0 20px 60px rgba(0,0,0,.4), var(--glow-blue);
+}
+.project-card:hover::before{opacity:1;}
+.project-img{
+  height:180px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:3.5rem;
+  border-bottom:1px solid var(--border);
+  position:relative;overflow:hidden;
+}
+.project-body{padding:22px 24px;}
+.project-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;}
+.project-tag{
+  font-size:.68rem;font-weight:700;
+  padding:3px 10px;border-radius:20px;
+  text-transform:uppercase;letter-spacing:.5px;
+}
+.tag-blue{background:rgba(88,166,255,.12);color:var(--blue);border:1px solid rgba(88,166,255,.2);}
+.tag-green{background:rgba(63,185,80,.1);color:var(--green);border:1px solid rgba(63,185,80,.2);}
+.tag-purple{background:rgba(188,140,255,.1);color:var(--purple);border:1px solid rgba(188,140,255,.2);}
+.tag-orange{background:rgba(247,129,102,.1);color:var(--orange);border:1px solid rgba(247,129,102,.2);}
+.project-title{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;color:#fff;margin-bottom:8px;}
+.project-desc{font-size:.85rem;color:var(--muted);line-height:1.7;}
+.project-links{padding:16px 24px;border-top:1px solid var(--border);display:flex;gap:12px;}
+.proj-link{
+  font-size:.78rem;font-weight:600;color:var(--muted);
+  text-decoration:none;display:flex;align-items:center;gap:5px;
+  transition:color .2s;
+}
+.proj-link:hover{color:var(--blue);}
+
+/* ========== SERVICES ========== */
+.service-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;padding:32px 28px;
+  transition:all .3s;height:100%;
+  position:relative;overflow:hidden;
+}
+.service-card::after{
+  content:'';
+  position:absolute;bottom:0;left:0;right:0;
+  height:2px;
+  background:linear-gradient(90deg,var(--blue),var(--purple));
+  transform:scaleX(0);
+  transition:transform .3s;
+}
+.service-card:hover{border-color:rgba(88,166,255,.25);transform:translateY(-4px);}
+.service-card:hover::after{transform:scaleX(1);}
+.service-icon{
+  width:52px;height:52px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.4rem;margin-bottom:20px;
+}
+.service-title{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:700;color:#fff;margin-bottom:10px;}
+.service-text{font-size:.85rem;color:var(--muted);line-height:1.75;}
+
+/* ========== EXPERIENCE ========== */
+.exp-section{background:var(--bg2);}
+.timeline{position:relative;padding-left:32px;}
+.timeline::before{
+  content:'';position:absolute;left:0;top:8px;bottom:8px;
+  width:1px;background:linear-gradient(to bottom,var(--blue),var(--purple),transparent);
+}
+.timeline-item{position:relative;margin-bottom:44px;}
+.timeline-item::before{
+  content:'';position:absolute;
+  left:-37px;top:6px;
+  width:10px;height:10px;border-radius:50%;
+  background:var(--blue);
+  box-shadow:0 0 12px var(--blue);
+}
+.tl-year{
+  font-family:'Space Mono',monospace;
+  font-size:.72rem;color:var(--blue);
+  letter-spacing:2px;margin-bottom:8px;
+}
+.tl-title{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;color:#fff;margin-bottom:6px;}
+.tl-org{font-size:.82rem;color:var(--purple);font-weight:600;margin-bottom:10px;}
+.tl-text{font-size:.88rem;color:var(--muted);line-height:1.75;}
+
+/* ========== STATS ========== */
+.stat-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:18px;padding:36px 24px;
+  text-align:center;
+  transition:all .3s;position:relative;overflow:hidden;
+}
+.stat-card::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at 50% 0%, rgba(88,166,255,.06) 0%, transparent 70%);
+}
+.stat-card:hover{border-color:rgba(88,166,255,.3);transform:translateY(-5px);}
+.stat-num{
+  font-family:'Syne',sans-serif;
+  font-size:3rem;font-weight:800;
+  color:#fff;letter-spacing:-2px;
+  line-height:1;margin-bottom:8px;
+}
+.stat-num span{color:var(--blue);}
+.stat-label{font-size:.82rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;font-weight:600;}
+.stat-icon{font-size:1.6rem;margin-bottom:16px;}
+
+/* ========== PRICING ========== */
+.pricing-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:20px;padding:36px 32px;
+  transition:all .3s;position:relative;height:100%;
+}
+.pricing-card.featured{
+  background:linear-gradient(135deg,#0f1e35,#111820);
+  border-color:rgba(88,166,255,.4);
+  box-shadow:var(--glow-blue);
+}
+.pricing-badge{
+  position:absolute;top:-12px;left:50%;transform:translateX(-50%);
+  background:linear-gradient(90deg,var(--blue),var(--purple));
+  color:#fff;font-size:.7rem;font-weight:700;
+  padding:4px 18px;border-radius:20px;white-space:nowrap;
+  letter-spacing:.5px;
+}
+.pricing-plan{font-family:'Space Mono',monospace;font-size:.72rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;}
+.pricing-price{
+  font-family:'Syne',sans-serif;
+  font-size:3.2rem;font-weight:800;
+  color:#fff;letter-spacing:-2px;line-height:1;
+  margin-bottom:6px;
+}
+.pricing-price span{font-size:1.2rem;color:var(--muted);font-weight:400;vertical-align:super;margin-right:4px;}
+.pricing-desc{color:var(--muted);font-size:.85rem;margin-bottom:28px;}
+.pricing-feat{list-style:none;margin-bottom:32px;}
+.pricing-feat li{
+  font-size:.87rem;color:var(--text);
+  padding:9px 0;
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:10px;
+}
+.pricing-feat li:last-child{border:none;}
+.pricing-feat li i{color:var(--green);font-size:.9rem;}
+.btn-pricing{
+  display:block;text-align:center;
+  background:rgba(88,166,255,.1);
+  border:1px solid rgba(88,166,255,.3);
+  color:var(--blue);font-weight:700;font-size:.88rem;
+  padding:13px;border-radius:10px;
+  text-decoration:none;transition:all .2s;
+}
+.btn-pricing:hover,.pricing-card.featured .btn-pricing{
+  background:var(--blue);color:#080c10;border-color:var(--blue);
+}
+
+/* ========== FAQ ========== */
+.faq-section{background:var(--bg2);}
+.faq-item{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:14px;
+  overflow:hidden;margin-bottom:12px;
+  transition:border-color .2s;
+}
+.faq-item:hover{border-color:rgba(88,166,255,.25);}
+.accordion-button{
+  background:var(--card) !important;
+  color:var(--text) !important;
+  font-weight:600;font-size:.92rem;
+  padding:18px 24px;
+  box-shadow:none !important;
+  border:none !important;
+}
+.accordion-button:not(.collapsed){color:#fff !important;background:var(--bg3) !important;}
+.accordion-button::after{filter:invert(1) opacity(.4);}
+.accordion-body{
+  background:var(--bg3);
+  color:var(--muted);font-size:.88rem;
+  line-height:1.8;padding:18px 24px;
+  border-top:1px solid var(--border);
+}
+
+/* ========== CONTACT ========== */
+.contact-card{
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:20px;padding:44px 40px;
+}
+.form-label{font-size:.82rem;font-weight:600;color:var(--text);margin-bottom:7px;letter-spacing:.3px;}
+.form-control,.form-select{
+  background:var(--bg3) !important;
+  border:1.5px solid var(--border) !important;
+  color:var(--text) !important;
+  border-radius:10px !important;
+  padding:12px 16px !important;
+  font-size:.9rem !important;
+  transition:border-color .2s !important;
+}
+.form-control:focus,.form-select:focus{
+  border-color:rgba(88,166,255,.5) !important;
+  box-shadow:0 0 0 3px rgba(88,166,255,.08) !important;
+}
+.form-control::placeholder{color:rgba(118,131,144,.5) !important;}
+.btn-submit{
+  background:linear-gradient(135deg,var(--blue),var(--purple));
+  color:#fff;border:none;
+  border-radius:10px;padding:14px 40px;
+  font-weight:700;font-size:.92rem;
+  width:100%;transition:all .3s;
+  box-shadow:0 4px 30px rgba(88,166,255,.2);
+}
+.btn-submit:hover{box-shadow:0 8px 40px rgba(88,166,255,.4);transform:translateY(-2px);}
+.contact-info-item{
+  display:flex;align-items:center;gap:16px;
+  padding:18px 0;border-bottom:1px solid var(--border);
+}
+.contact-info-item:last-child{border:none;}
+.ci-icon{
+  width:44px;height:44px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.1rem;flex-shrink:0;
+}
+.ci-label{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px;}
+.ci-val{font-size:.92rem;font-weight:600;color:var(--text);}
+
+/* ========== FOOTER ========== */
+footer{
+  background:var(--bg);
+  border-top:1px solid var(--border);
+  padding:40px 0;text-align:center;
+}
+.footer-logo{
+  font-family:'Syne',sans-serif;
+  font-size:1.6rem;font-weight:800;
+  color:#fff;letter-spacing:-1px;margin-bottom:16px;
+}
+.footer-logo span{color:var(--blue);}
+.footer-links a{
+  color:var(--muted);text-decoration:none;
+  font-size:.82rem;margin:0 14px;
+  transition:color .2s;
+  text-transform:uppercase;letter-spacing:.5px;
+}
+.footer-links a:hover{color:var(--blue);}
+.social-links{display:flex;justify-content:center;gap:12px;margin:24px 0;}
+.soc-btn{
+  width:40px;height:40px;border-radius:10px;
+  background:var(--bg3);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--muted);font-size:1rem;text-decoration:none;
+  transition:all .2s;
+}
+.soc-btn:hover{border-color:var(--blue);color:var(--blue);background:rgba(88,166,255,.08);}
+.footer-copy{font-size:.78rem;color:var(--muted);}
+.footer-copy span{color:var(--blue);}
+
+/* ========== ANIMATIONS ========== */
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(30px);}
+  to{opacity:1;transform:translateY(0);}
+}
+.fade-up{
+  opacity:0;transform:translateY(30px);
+  transition:opacity .7s ease, transform .7s ease;
+}
+.fade-up.visible{opacity:1;transform:translateY(0);}
+
+/* Section BGs */
+.bg-alt{background:var(--bg2);}
+</style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- PARTICLES -->
+<div class="particles" id="particles"></div>
+
+<!-- ========== NAVBAR ========== -->
+<nav class="navbar navbar-expand-lg">
+  <div class="container">
+    <a class="navbar-brand" href="#home">Kumail<span>.</span></a>
+    <button class="navbar-toggler border-0" data-bs-toggle="collapse" data-bs-target="#nav">
+      <span class="navbar-toggler-icon" style="filter:invert(.7)"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="nav">
+      <ul class="navbar-nav ms-auto gap-1">
+        <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="#skills">Skills</a></li>
+        <li class="nav-item"><a class="nav-link" href="#projects">Projects</a></li>
+        <li class="nav-item"><a class="nav-link" href="#services">Services</a></li>
+        <li class="nav-item"><a class="nav-link" href="#experience">Experience</a></li>
+        <li class="nav-item"><a class="nav-link" href="#stats">Stats</a></li>
+        <li class="nav-item"><a class="nav-link" href="#pricing">Pricing</a></li>
+        <li class="nav-item"><a class="nav-link" href="#faq">FAQ</a></li>
+        <li class="nav-item ms-2"><a href="#contact" class="btn-glow" style="padding:8px 22px;font-size:.82rem">Hire Me</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- ========== HERO ========== -->
+<section class="hero" id="home">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="container">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-7 order-2 order-lg-1">
+        <div class="hero-tag">Available for Work</div>
+        <h1>
+          Hi, I'm<br>
+          <span class="name">Kumail Dev</span>
+        </h1>
+        <p class="hero-sub">
+          <strong>Frontend Developer</strong> &amp; <strong>UI Designer</strong> crafting beautiful, responsive web experiences with clean code and creative design.
+        </p>
+        <div class="hero-btns">
+          <a href="#about" class="btn-glow"><i class="bi bi-grid-3x3-gap-fill"></i> About me</a>
+          <a href="#contact" class="btn-ghost"><i class="bi bi-send"></i> Get In Touch</a>
+        </div>
+        <div class="mt-5 d-flex align-items-center gap-4 flex-wrap" style="animation:fadeUp .8s .4s ease both;opacity:0">
+          <div style="font-family:'Space Mono',monospace;font-size:.72rem;color:var(--muted);letter-spacing:1px">BUILT WITH</div>
+          <div class="d-flex gap-2 flex-wrap">
+            <span class="tech-pill">HTML5</span>
+            <span class="tech-pill">CSS3</span>
+            <span class="tech-pill">Bootstrap</span>
+            <span class="tech-pill">JavaScript</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-5 order-1 order-lg-2">
+        <div class="hero-avatar-wrap">
+          <div class="hero-avatar-ring">
+            <div class="hero-avatar-inner"><img src="./Copilot_20260414_174436.png" alt="img"></div>
+            <div class="hero-badge top"><span style="color:var(--green)">●</span> Available Now</div>
+            <div class="hero-badge bottom"><i class="bi bi-star-fill" style="color:var(--purple)"></i> 30+ Projects</div>
+            <div class="hero-badge left"><i class="bi bi-star" style="color: var(--purple);"></i> A Passionate Student</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== ABOUT ========== -->
+<section class="py-5 bg-alt" id="about">
+  <div class="container py-5">
+    <div class="section-header fade-up">
+      <span class="section-label">01 — About</span>
+      <h2 class="section-title">Who Am <span>I?</span></h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="row g-5 align-items-center">
+      <div class="col-lg-5 fade-up">
+        <div class="about-img-wrap">
+          <div class="about-img">
+            <img src="./b.png" alt="images">
+            <div class="about-tag t1"><i class="bi bi-code-slash me-2"></i>Clean Code</div>
+            <div class="about-tag t2"><i class="bi bi-palette me-2"></i>Creative UI</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-7 fade-up about-text">
+        <div style="font-family:'Space Mono',monospace;font-size:.72rem;color:var(--blue);letter-spacing:2px;margin-bottom:16px">// WHO I AM</div>
+        <h3 style="font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;color:#fff;margin-bottom:20px;letter-spacing:-1px">Passionate developer<br>from Skardu, Pakistan</h3>
+        <p>I'm <strong>Kumail Abbas</strong>, a self-taught frontend developer and UI designer passionate about building <strong>beautiful, functional web experiences</strong>. I started my journey in 2024 and haven't stopped learning since.</p>
+        <p>I specialise in creating <strong>responsive, dark-themed interfaces</strong> using HTML, CSS, and Bootstrap — with a strong eye for design detail, whitespace, and modern aesthetics.</p>
+        <p>When I'm not coding, I'm exploring new design trends, improving my skills, and turning ideas into pixel-perfect reality.</p>
+        <div class="row g-3 mt-2">
+          <div class="col-6">
+            <div style="background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:16px 18px;">
+              <div style="font-family:'Space Mono',monospace;font-size:.7rem;color:var(--muted);margin-bottom:4px">LOCATION</div>
+              <div style="font-weight:600;color:var(--text)"><i class="bi bi-geo-alt-fill me-2" style="color:var(--blue)"></i>Skardu, GB, Pakistan</div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div style="background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:16px 18px;">
+              <div style="font-family:'Space Mono',monospace;font-size:.7rem;color:var(--muted);margin-bottom:4px">STATUS</div>
+              <div style="font-weight:600;color:var(--green)"><i class="bi bi-circle-fill me-2" style="font-size:.6rem"></i>Open to Work</div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div style="background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:16px 18px;">
+              <div style="font-family:'Space Mono',monospace;font-size:.7rem;color:var(--muted);margin-bottom:4px">EXPERIENCE</div>
+              <div style="font-weight:600;color:var(--text)"><i class="bi bi-calendar me-2" style="color:var(--blue)"></i>2+ Years</div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div style="background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:16px 18px;">
+              <div style="font-family:'Space Mono',monospace;font-size:.7rem;color:var(--muted);margin-bottom:4px">FOCUS</div>
+              <div style="font-weight:600;color:var(--text)"><i class="bi bi-lightning-fill me-2" style="color:var(--purple)"></i>UI/Frontend</div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div style="background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:16px 18px;">
+              <div class="hero-btns">
+                <a href="#skills" class="btn-glow"><i class="bi bi-grid-3x3-gap-fill"></i> Skills</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== SKILLS ========== -->
+<section class="py-5 skills-section" id="skills">
+  <div class="container py-5">
+    <div class="section-header fade-up">
+      <span class="section-label">02 — Skills</span>
+      <h2 class="section-title">My <span>Expertise</span></h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="row g-5 mb-5">
+      <div class="col-lg-6 fade-up">
+        <div class="skill-group-title">Core Technologies</div>
+        <div class="skill-item">
+          <div class="skill-header"><span class="skill-name">HTML5</span><span class="skill-pct">95%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:95%"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-header"><span class="skill-name">CSS3</span><span class="skill-pct">90%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:90%"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-header"><span class="skill-name">Bootstrap 5</span><span class="skill-pct">88%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:88%"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-header"><span class="skill-name">UI/UX Design</span><span class="skill-pct">82%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:82%"></div></div>
+        </div>
+      </div>
+      <div class="col-lg-6 fade-up">
+        <div class="skill-group-title">Design & Other</div>
+        <div class="skill-item">
+          <div class="skill-header"><span class="skill-name">Python Basic</span><span class="skill-pct">91%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:91%"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-header"><span class="skill-name">C++ Basic</span><span class="skill-pct">82%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:82%"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-header"><span class="skill-name">JavaScript Basics</span><span class="skill-pct">70%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:70%"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-header"><span class="skill-name">Creativity & Design Sense</span><span class="skill-pct">98%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="width:98%"></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="fade-up">
+      <div class="skill-group-title text-center mb-4">Tools & Technologies</div>
+      <div class="text-center">
+        <span class="tool-badge"><span class="ti">🌐</span>VS Code</span>
+        <span class="tool-badge"><span class="ti">🎨</span>Figma</span>
+        <span class="tool-badge"><span class="ti">🐙</span>GitHub</span>
+        <span class="tool-badge"><span class="ti">📱</span>Responsive Design</span>
+        <span class="tool-badge"><span class="ti">⚡</span>CDN Frameworks</span>
+        <span class="tool-badge"><span class="ti">🔧</span>Chrome DevTools</span>
+        <span class="tool-badge"><span class="ti">📐</span>Grid & Flexbox</span>
+        <span class="tool-badge"><span class="ti">✨</span>CSS Animations</span>
+        <span class="tool-badge"><span class="ti">📽</span>
+          <div class="hero-btns">
+            <a href="#projects" class="btn-glow"><i class="bi bi-grid-3x3-gap-fill"></i> Projects</a>
+          </div>
+        </span>
+      </div>
+    </div>
+  </div>
+  
+</section>
+
+<!-- ========== PROJECTS ========== -->
+<section class="py-5 bg-alt" id="projects">
+  <div class="container py-5">
+    <div class="section-header fade-up">
+      <span class="section-label">03 — Projects</span>
+      <h2 class="section-title">Featured <span>Work</span></h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-6 col-lg-4 fade-up">
+        <div class="project-card">
+          <div class="project-img" style="background:linear-gradient(135deg,#1c2d42,#0d1219)">🧑‍💻</div>
+          <div class="project-body">
+            <div class="project-tags"><span class="project-tag tag-blue">HTML</span><span class="project-tag tag-purple">CSS</span></div>
+            <div class="project-title">Portfolio Website</div>
+            <div class="project-desc">A dark-themed personal portfolio with smooth animations, custom cursor, and modern UI components.</div>
+          </div>
+          <div class="project-links">
+            <a href="#" class="proj-link"><i class="bi bi-eye"></i> Live Demo</a>
+            <a href="#" class="proj-link"><i class="bi bi-github"></i> Code</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4 fade-up">
+        <div class="project-card">
+          <div class="project-img" style="background:linear-gradient(135deg,#1a2e1a,#0d1219)">🏢</div>
+          <div class="project-body">
+            <div class="project-tags"><span class="project-tag tag-green">Bootstrap</span><span class="project-tag tag-blue">HTML</span></div>
+            <div class="project-title">Business Landing Page</div>
+            <div class="project-desc">Fully responsive business landing page with hero section, pricing cards, and contact form.</div>
+          </div>
+          <div class="project-links">
+            <a href="#" class="proj-link"><i class="bi bi-eye"></i> Live Demo</a>
+            <a href="#" class="proj-link"><i class="bi bi-github"></i> Code</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4 fade-up">
+        <div class="project-card">
+          <div class="project-img" style="background:linear-gradient(135deg,#2a1a2e,#0d1219)">📊</div>
+          <div class="project-body">
+            <div class="project-tags"><span class="project-tag tag-purple">UI Design</span><span class="project-tag tag-blue">CSS</span></div>
+            <div class="project-title">Admin Dashboard UI</div>
+            <div class="project-desc">Dark mode admin panel with sidebar navigation, stats cards, charts, and data tables.</div>
+          </div>
+          <div class="project-links">
+            <a href="#" class="proj-link"><i class="bi bi-eye"></i> Live Demo</a>
+            <a href="#" class="proj-link"><i class="bi bi-github"></i> Code</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4 fade-up">
+        <div class="project-card">
+          <div class="project-img" style="background:linear-gradient(135deg,#1a2020,#0d1219)">📝</div>
+          <div class="project-body">
+            <div class="project-tags"><span class="project-tag tag-orange">Blog</span><span class="project-tag tag-green">Bootstrap</span></div>
+            <div class="project-title">Modern Blog Template</div>
+            <div class="project-desc">Clean blog layout with article cards, sidebar, tags, pagination, and category filters.</div>
+          </div>
+          <div class="project-links">
+            <a href="#" class="proj-link"><i class="bi bi-eye"></i> Live Demo</a>
+            <a href="#" class="proj-link"><i class="bi bi-github"></i> Code</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4 fade-up">
+        <div class="project-card">
+          <div class="project-img" style="background:linear-gradient(135deg,#2a2a1a,#0d1219)">🛒</div>
+          <div class="project-body">
+            <div class="project-tags"><span class="project-tag tag-orange">E-Commerce</span><span class="project-tag tag-blue">CSS Grid</span></div>
+            <div class="project-title">E-Commerce UI Concept</div>
+            <div class="project-desc">Product listing page, shopping cart sidebar, and checkout UI with modern card design.</div>
+          </div>
+          <div class="project-links">
+            <a href="#" class="proj-link"><i class="bi bi-eye"></i> Live Demo</a>
+            <a href="#" class="proj-link"><i class="bi bi-github"></i> Code</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4 fade-up">
+        <div class="project-card">
+          <div class="project-img" style="background:linear-gradient(135deg,#1a1a2a,#0d1219)">🔐</div>
+          <div class="project-body">
+            <div class="project-tags"><span class="project-tag tag-purple">Auth UI</span><span class="project-tag tag-blue">HTML</span></div>
+            <div class="project-title">Secure Login System UI</div>
+            <div class="project-desc">Beautiful login, register, and forgot password pages with glassmorphism effects.</div>
+          </div>
+          <div class="project-links">
+            <a href="#" class="proj-link"><i class="bi bi-eye"></i> Live Demo</a>
+            <a href="#" class="proj-link"><i class="bi bi-github"></i> Code</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== SERVICES ========== -->
+<section class="py-5" id="services">
+  <div class="container py-5">
+    <div class="section-header fade-up">
+      <span class="section-label">04 — Services</span>
+      <h2 class="section-title">What I <span>Offer</span></h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-6 col-lg-4 fade-up"><div class="service-card h-100">
+        <div class="service-icon" style="background:rgba(88,166,255,.1);color:var(--blue)"><i class="bi bi-layout-text-window-reverse"></i></div>
+        <div class="service-title">Web Design</div>
+        <div class="service-text">Designing visually stunning, modern websites from scratch with pixel-perfect attention to layout, typography, and colour.</div>
+      </div></div>
+      <div class="col-md-6 col-lg-4 fade-up"><div class="service-card h-100">
+        <div class="serv  ice-icon" style="background:rgba(188,140,255,.1);color:var(--purple)"><i class="bi bi-palette2"></i></div>
+        <div class="service-title">UI/UX Design</div>
+        <div class="service-text">Creating intuitive user interfaces and smooth user experiences that balance beauty with usability.</div>
+      </div></div>
+      <div class="col-md-6 col-lg-4 fade-up"><div class="service-card h-100">
+        <div class="service-icon" style="background:rgba(63,185,80,.1);color:var(--green)"><i class="bi bi-code-square"></i></div>
+        <div class="service-title">Frontend Development</div>
+        <div class="service-text">Building clean, semantic HTML/CSS/Bootstrap code that's maintainable, fast, and cross-browser compatible.</div>
+      </div></div>
+      <div class="col-md-6 col-lg-4 fade-up"><div class="service-card h-100">
+        <div class="service-icon" style="background:rgba(247,129,102,.1);color:var(--orange)"><i class="bi bi-phone"></i></div>
+        <div class="service-title">Responsive Websites</div>
+        <div class="service-text">Every project is fully responsive — looks and works perfectly on mobile, tablet, and desktop.</div>
+      </div></div>
+      <div class="col-md-6 col-lg-4 fade-up"><div class="service-card h-100">
+        <div class="service-icon" style="background:rgba(88,166,255,.1);color:var(--blue)"><i class="bi bi-rocket-takeoff"></i></div>
+        <div class="service-title">Landing Pages</div>
+        <div class="service-text">High-converting, attractive landing pages for businesses, products, and personal brands.</div>
+      </div></div>
+      <div class="col-md-6 col-lg-4 fade-up"><div class="service-card h-100">
+        <div class="service-icon" style="background:rgba(188,140,255,.1);color:var(--purple)"><i class="bi bi-person-badge"></i></div>
+        <div class="service-title">Portfolio Design</div>
+        <div class="service-text">Custom portfolio websites for developers, designers, and creatives that make a memorable first impression.</div>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== EXPERIENCE ========== -->
+<section class="py-5 exp-section" id="experience">
+  <div class="container py-5">
+    <div class="section-header fade-up">
+      <span class="section-label">05 — Journey</span>
+      <h2 class="section-title">My <span>Experience</span></h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="timeline fade-up">
+          <div class="timeline-item">
+            <div class="tl-year">Began 2024 — BEGINNING</div>
+            <div class="tl-title">Start learning Basic of Computer Science.</div>
+            <div class="tl-org">Leaning · Skardu, Pakistan</div>
+            <div class="tl-text">Began learning FCC (Fundamental Concept of Computer), Microsoft Word, Microsoft Excel, Microsoft PowerPoint, Inpage, and Canva. Built Presentations by using PowerPoint, desinging by Canva. Completed multiple online courses and tutorials.</div>
+          </div>
+          <div class="timeline-item">
+            <div class="tl-year">End 2024 — GROWTH</div>
+            <div class="tl-title">C++, Python, &   JavaScript</div>
+            <div class="tl-org">?...</div>
+            <div class="tl-text">?...</div>
+          </div>
+          <div class="timeline-item">
+            <div class="tl-year">Began 2025 — GROWTH</div>
+            <div class="tl-title">Started Web Development Journey</div>
+            <div class="tl-org">lering basic web dev · Skardu, Pakistan</div>
+            <div class="tl-text">Began learning HTML and CSS fundamentals. Built first static web pages and discovered a deep passion for design and front-end development. Completed multiple online courses and tutorials.</div>
+          </div>
+          <div class="timeline-item">
+            <div class="tl-year">End 2025 — GROWTH</div>
+            <div class="tl-title">Bootstrap & Responsive Design</div>
+            <div class="tl-org">Freelance Projects · Remote</div>
+            <div class="tl-text">Mastered Bootstrap 5 and built 20+ projects including business sites, dashboards, and landing pages. Started taking on freelance projects and delivering real work to clients.</div>
+          </div>
+          <div class="timeline-item">
+            <div class="tl-year">2026 — NOW</div>
+            <div class="tl-title">Advanced UI Design, Portfolio, & Updates</div>
+            <div class="tl-org">Active Developer · Open to Opportunities</div>
+            <div class="tl-text">Levelling up with JavaScript, advanced CSS animations, and complex UI systems. Building a strong portfolio and actively seeking collaborations, freelance work, and full-time opportunities.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== STATS ========== -->
+<section class="py-5 bg-alt" id="stats">
+  <div class="container py-5">
+    <div class="section-header fade-up">
+      <span class="section-label">06 — Numbers</span>
+      <h2 class="section-title">By The <span>Numbers</span></h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="row g-4">
+      <div class="col-6 col-lg-3 fade-up">
+        <div class="stat-card">
+          <div class="stat-icon">🚀</div>
+          <div class="stat-num">30<span>+</span></div>
+          <div class="stat-label">Projects Built</div>
+        </div>
+      </div>
+      <div class="col-6 col-lg-3 fade-up">
+        <div class="stat-card">
+          <div class="stat-icon">😊</div>
+          <div class="stat-num">20<span>+</span></div>
+          <div class="stat-label">Happy Clients</div>
+        </div>
+      </div>
+      <div class="col-6 col-lg-3 fade-up">
+        <div class="stat-card">
+          <div class="stat-icon">📅</div>
+          <div class="stat-num">2<span>+</span></div>
+          <div class="stat-label">Years Coding</div>
+        </div>
+      </div>
+      <div class="col-6 col-lg-3 fade-up">
+        <div class="stat-card">
+          <div class="stat-icon">💯</div>
+          <div class="stat-num">100<span>%</span></div>
+          <div class="stat-label">Dedication</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== PRICING ========== -->
+<section class="py-5" id="pricing">
+  <div class="container py-5">
+    <div class="section-header fade-up">
+      <span class="section-label">07 — Pricing</span>
+      <h2 class="section-title">Simple <span>Plans</span></h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="row g-4 justify-content-center">
+      <div class="col-md-6 col-lg-4 fade-up">
+        <div class="pricing-card h-100">
+          <div class="pricing-plan">Starter</div>
+          <div class="pricing-price"><span>$</span>10</div>
+          <div class="pricing-desc">Perfect for simple static websites</div>
+          <ul class="pricing-feat">
+            <li><i class="bi bi-check-lg"></i>1-Page Website</li>
+            <li><i class="bi bi-check-lg"></i>Responsive Design</li>
+            <li><i class="bi bi-check-lg"></i>Basic Animations</li>
+            <li><i class="bi bi-check-lg"></i>Source Code Included</li>
+            <li style="color:var(--muted)"><i class="bi bi-x-lg" style="color:#444"></i>Custom Features</li>
+          </ul>
+          <a href="#contact" class="btn-pricing">Get Started</a>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4 fade-up">
+        <div class="pricing-card featured h-100">
+          <div class="pricing-badge">Most Popular</div>
+          <div class="pricing-plan">Standard</div>
+          <div class="pricing-price"><span>$</span>30</div>
+          <div class="pricing-desc">Full business website with all sections</div>
+          <ul class="pricing-feat">
+            <li><i class="bi bi-check-lg"></i>Multi-Page Website</li>
+            <li><i class="bi bi-check-lg"></i>Fully Responsive</li>
+            <li><i class="bi bi-check-lg"></i>Advanced Animations</li>
+            <li><i class="bi bi-check-lg"></i>Contact Form</li>
+            <li><i class="bi bi-check-lg"></i>2 Revision Rounds</li>
+          </ul>
+          <a href="#contact" class="btn-pricing">Get Started</a>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4 fade-up">
+        <div class="pricing-card h-100">
+          <div class="pricing-plan">Premium</div>
+          <div class="pricing-price"><span>$</span>60</div>
+          <div class="pricing-desc">Advanced UI/UX with custom design system</div>
+          <ul class="pricing-feat">
+            <li><i class="bi bi-check-lg"></i>Custom UI Design System</li>
+            <li><i class="bi bi-check-lg"></i>All Pages + Dashboard</li>
+            <li><i class="bi bi-check-lg"></i>Premium Animations</li>
+            <li><i class="bi bi-check-lg"></i>Unlimited Revisions</li>
+            <li><i class="bi bi-check-lg"></i>Priority Support</li>
+          </ul>
+          <a href="#contact" class="btn-pricing">Get Started</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== FAQ ========== -->
+<section class="py-5 faq-section" id="faq">
+  <div class="container py-5">
+    <div class="section-header fade-up">
+      <span class="section-label">08 — FAQ</span>
+      <h2 class="section-title">Common <span>Questions</span></h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-lg-8 fade-up">
+        <div class="accordion" id="faqAccordion">
+          <div class="faq-item"><h2 class="accordion-header"><button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#f1">What technologies do you use?</button></h2><div id="f1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion"><div class="accordion-body">I build websites using HTML5, CSS3, Bootstrap 5, and JavaScript. I'm also comfortable with CSS Grid, Flexbox, animations, and using third-party libraries like Bootstrap Icons and Google Fonts to create polished interfaces.</div></div></div>
+          <div class="faq-item"><h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#f2">Are you available for freelance work?</button></h2><div id="f2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion"><div class="accordion-body">Yes! I'm actively available for freelance projects, collaborations, and part-time remote work. Feel free to reach out through the contact section with your project details.</div></div></div>
+          <div class="faq-item"><h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#f3">How long does a typical project take?</button></h2><div id="f3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion"><div class="accordion-body">A simple landing page takes 2-3 days. A full multi-page website usually takes 5-10 days depending on complexity. I always communicate clearly about timelines upfront.</div></div></div>
+          <div class="faq-item"><h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#f4">Do you design UI or just develop?</button></h2><div id="f4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion"><div class="accordion-body">Both! I can take a design brief or rough idea and turn it into a fully designed and coded website. I have a strong eye for UI design — especially dark, modern interfaces like this one.</div></div></div>
+          <div class="faq-item"><h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#f5">Will my website work on mobile?</button></h2><div id="f5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion"><div class="accordion-body">Absolutely. Every project I build is fully responsive and tested on mobile, tablet, and desktop devices. Mobile-first design is a core part of my workflow.</div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== CONTACT ========== -->
+<section class="py-5 bg-alt" id="contact">
+  <div class="container py-5">
+    <div class="section-header fade-up">
+      <span class="section-label">09 — Contact</span>
+      <h2 class="section-title">Let's <span>Talk</span></h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="row g-5">
+      <div class="col-lg-5 fade-up">
+        <h3 style="font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;color:#fff;letter-spacing:-1px;margin-bottom:16px">Got a project in mind?</h3>
+        <p style="color:var(--muted);line-height:1.8;margin-bottom:36px">I'm always open to discussing new projects, creative ideas, or opportunities to be part of your vision. Let's build something great together.</p>
+        <div class="contact-info-item">
+          <div class="ci-icon" style="background:rgba(88,166,255,.1);color:var(--blue)"><i class="bi bi-envelope-fill"></i></div>
+          <div><div class="ci-label">Email</div><div class="ci-val">kum.abbas014@gmail.com</div></div>
+        </div>
+        <div class="contact-info-item">
+          <div class="ci-icon" style="background:rgba(63,185,80,.1);color:var(--green)"><i class="bi bi-whatsapp"></i></div>
+          <div><div class="ci-label">WhatsApp</div><div class="ci-val">+92 300 0000000</div></div>
+        </div>
+        <div class="contact-info-item">
+          <div class="ci-icon" style="background:rgba(188,140,255,.1);color:var(--purple)"><i class="bi bi-geo-alt-fill"></i></div>
+          <div><div class="ci-label">Location</div><div class="ci-val">Skardu, Gilgit-Baltistan, Pakistan</div></div>
+        </div>
+        <div class="mt-4">
+          <div class="social-links" style="justify-content:flex-start;">
+            <a href="#" class="soc-btn"><i class="bi bi-github"></i></a>
+            <a href="#" class="soc-btn"><i class="bi bi-linkedin"></i></a>
+            <a href="#" class="soc-btn"><i class="bi bi-twitter-x"></i></a>
+            <a href="#" class="soc-btn"><i class="bi bi-instagram"></i></a>
+            <a href="#" class="soc-btn"><i class="bi bi-facbook"></i></a>
+            <a href="#" class="soc-btn"><i class="bi bi-whatsapp"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-7 fade-up">
+        <div class="contact-card">
+          <div class="row g-3">
+            <div class="col-md-6"><label class="form-label">Your Name</label><input class="form-control" placeholder="Name"></div>
+            <div class="col-md-6"><label class="form-label">Email Address</label><input type="email" class="form-control" placeholder="you@example.com"></div>
+            <div class="col-12"><label class="form-label">Subject</label><select class="form-select"><option>Project Enquiry</option><option>Freelance Work</option><option>Collaboration</option><option>Other</option></select></div>
+            <div class="col-12"><label class="form-label">Your Budget</label><select class="form-select"><option>Under $10</option><option>$10 - $30</option><option>$30 - $60</option><option>$60+</option></select></div>
+            <div class="col-12"><label class="form-label">Message</label><textarea class="form-control" rows="5" placeholder="Tell me about your project..."></textarea></div>
+            <div class="col-12 mt-2"><button class="btn-submit">Send Message <i class="bi bi-send-fill ms-2"></i></button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== FOOTER ========== -->
+<footer>
+  <div class="container">
+    <div class="footer-logo">
+      <a href="#home" class="footer-logo" style="text-decoration-line: none;">Kumail</a><span>.</span></div>
+    <div class="footer-links">
+      <a href="#about">About</a>
+      <a href="#skills">Skills</a>
+      <a href="#projects">Projects</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <div class="social-links">
+      <a href="#" class="soc-btn"><i class="bi bi-github"></i></a>
+      <a href="#" class="soc-btn"><i class="bi bi-linkedin"></i></a>
+      <a href="#" class="soc-btn"><i class="bi bi-twitter-x"></i></a>
+      <a href="#" class="soc-btn"><i class="bi bi-instagram"></i></a>
+      <a href="#" class="soc-btn"><i class="bi bi-facbook"></i></a>
+      <a href="#" class="soc-btn"><i class="bi bi-whatsapp"></i></a>
+    </div>
+    <div class="footer-copy">© 2026 <span>Kumail Dev</span> · Built with 💙 in Skardu, Pakistan</div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+<script>
+  // CUSTOM CURSOR
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = mx - 5 + 'px';
+    cursor.style.top = my - 5 + 'px';
+  });
+  function animRing() {
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    ring.style.left = rx - 18 + 'px';
+    ring.style.top = ry - 18 + 'px';
+    requestAnimationFrame(animRing);
+  }
+  animRing();
+  document.querySelectorAll('a,button,.project-card,.service-card,.stat-card').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.style.transform = 'scale(3)';
+      ring.style.opacity = '0.4';
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.style.transform = 'scale(1)';
+      ring.style.opacity = '1';
+    });
+  });
+
+  // PARTICLES
+  const pContainer = document.getElementById('particles');
+  for (let i = 0; i < 30; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.style.cssText = `
+      left:${Math.random()*100}%;
+      animation-delay:${Math.random()*20}s;
+      animation-duration:${15 + Math.random()*20}s;
+      opacity:${Math.random()*0.4};
+    `;
+    pContainer.appendChild(p);
+  }
+
+  // SCROLL FADE
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+  // NAVBAR SCROLL
+  window.addEventListener('scroll', () => {
+    const nav = document.querySelector('.navbar');
+    if (window.scrollY > 50) {
+      nav.style.padding = '10px 0';
+      nav.style.background = 'rgba(8,12,16,.97)';
+    } else {
+      nav.style.padding = '16px 0';
+      nav.style.background = 'rgba(8,12,16,.85)';
+    }
+  });
+
+  // ACTIVE NAV LINK
+  const sections = document.querySelectorAll('section[id]');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 100) current = s.id;
+    });
+    document.querySelectorAll('.nav-link').forEach(a => {
+      a.style.color = a.getAttribute('href') === '#' + current ? 'var(--blue)' : '';
+    });
+  });
+</script>
+</body>
+</html>
